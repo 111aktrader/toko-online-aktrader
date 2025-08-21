@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AK TRADER — E-Commerce Fashion Pria & Wanita</title>
+  <meta name="description" content="AK TRADER: Fashion pria & wanita usia 6–45 tahun. Kualitas premium, harga bersahabat. Jakarta Timur, Indonesia."/>
+  <style>
+    :root{
+      --blue:#1e3a8a; --indigo:#4338ca; --rose:#e11d48; --red:#ef4444; --gold:#f59e0b; --ink:#0b1020;
+      --grad:linear-gradient(135deg,#1e3a8a 0%,#4338ca 35%,#ef4444 100%);
+      --card:rgba(255,255,255,.08); --card-strong:rgba(255,255,255,.14);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;scroll-behavior:smooth}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;background:var(--grad);color:#fff;line-height:1.6}
+
+    /* ========== NAVBAR ========== */
+    .nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(10px);
+      background:linear-gradient( to right, rgba(14,18,34,.85),rgba(14,18,34,.6) );border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav-inner{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .brand-logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#ef4444);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    .brand-logo span{font-weight:900}
+    .nav a{color:#fff;text-decoration:none;margin:0 10px;font-weight:600;opacity:.9}
+    .nav a:hover{opacity:1;color:#facc15}
+    .nav-cta{background:#2563eb;border:none;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+    .nav-cta:hover{background:#1d4ed8}
+
+    /* ========== HERO SLIDER ========== */
+    .hero{position:relative;height:78vh;display:grid;place-items:center;overflow:hidden}
+    .slide{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity .9s ease;opacity:0}
+    .slide.active{opacity:1}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient( to bottom, rgba(0,0,0,.45), rgba(0,0,0,.70) )}
+    .hero-content{position:relative;z-index:2;text-align:center;padding:0 20px}
+    .hero h1{font-size:clamp(32px,5vw,56px);margin:.2em 0}
+    .hero p{font-size:clamp(16px,2.5vw,20px);opacity:.95;margin-bottom:18px}
+    .hero .btn{background:#f59e0b;border:none;color:#111;padding:12px 18px;border-radius:12px;font-weight:800;cursor:pointer}
+    .hero .btn:hover{filter:brightness(1.05)}
+
+    /* ========== SECTION WRAPPER ========== */
+    section{padding:64px 18px}
+    .wrap{max-width:1200px;margin:auto}
+
+    /* ========== ABOUT + VISI MISI ========== */
+    .about{display:grid;grid-template-columns: 1.1fr 1fr;gap:28px;align-items:center}
+    .about .card{background:var(--card);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:26px;box-shadow:0 16px 40px rgba(0,0,0,.25)}
+    .about h2{margin:0 0 10px;font-size:32px}
+    .about p, .about li{opacity:.95}
+    .about-img{border-radius:18px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.35)}
+    .about-img img{width:100%;display:block}
+
+    /* badges */
+    .badge{display:inline-block;background:linear-gradient(135deg,#22d3ee,#ef4444);color:#111;padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px;margin-bottom:8px}
+
+    /* ========== FILTERS BAR ========== */
+    .filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:14px}
+    .filters select,.filters input{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(9,11,20,.55);color:#fff;min-width:160px}
+    .filters .pill{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);cursor:pointer}
+    .filters .pill.active{background:#2563eb}
+
+    /* ========== PRODUCT GRID ========== */
+    .grid{display:grid;grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:18px}
+    .prod{background:var(--card);border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+    .prod img{width:100%;height:220px;object-fit:cover;display:block}
+    .prod .body{padding:14px 14px 16px}
+    .price{font-weight:900}
+    .muted{opacity:.8;font-size:14px}
+    .btn{background:#2563eb;color:#fff;border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn.secondary{background:#0ea5e9}
+    .btn.block{width:100%}
+    .qty{display:flex;align-items:center;gap:8px;margin:8px 0}
+    .qty button{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-weight:900;cursor:pointer}
+
+    /* ========== GALLERY ========== */
+    .gallery{columns: 3 280px; column-gap:14px}
+    .gallery img{width:100%;margin:0 0 14px;border-radius:14px;box-shadow:0 8px 22px rgba(0,0,0,.3);cursor:pointer}
+    @media (max-width:900px){.about{grid-template-columns:1fr}.hero{height:70vh}}
+
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:60}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:92vw;max-height:82vh;border-radius:12px}
+
+    /* ========== CART DRAWER & CHECKOUT ========== */
+    .cart{position:fixed;top:0;right:-420px;width:380px;max-width:92vw;height:100vh;background:#fff;color:#111;box-shadow:-6px 0 24px rgba(0,0,0,.35);transition:right .35s ease;z-index:70;display:flex;flex-direction:column}
+    .cart.open{right:0}
+    .cart-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #eee;background:#fafafa}
+    .cart-body{padding:14px;overflow:auto;flex:1}
+    .cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed #e5e7eb}
+    .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+    .cart-foot{padding:14px;border-top:1px solid #eee;background:#fafafa}
+    .cart-foot .row{display:flex;justify-content:space-between;margin:6px 0}
+    .checkout{background:#111;color:#fff;border:none;border-radius:10px;padding:12px 14px;width:100%;font-weight:800;cursor:pointer}
+    .closeX{background:transparent;border:none;font-size:22px;cursor:pointer}
+
+    /* Checkout form */
+    .checkout-wrap{background:var(--card);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:22px;display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+    .form label{font-weight:700;font-size:14px}
+    .form input,.form select,.form textarea{width:100%;padding:10px 12px;margin:6px 0 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(10,14,28,.55);color:#fff}
+    .sum{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px}
+    .sum .row{display:flex;justify-content:space-between;margin:6px 0}
+
+    /* ========== TESTIMONI / FAQ / NEWSLETTER / CONTACT ========== */
+    .section-card{background:var(--card);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:24px}
+    .testi{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .quote{background:var(--card-strong);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px}
+    .stars{color:#ffd166}
+
+    .faq details{background:var(--card-strong);border:1px solid rgba(255,255,255,.18);border-radius:12px;margin:10px 0;padding:10px}
+    .faq summary{cursor:pointer;font-weight:800}
+
+    .newsletter form{display:flex;gap:10px;flex-wrap:wrap}
+    .newsletter input{flex:1;min-width:220px}
+
+    .contact .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    @media (max-width:900px){.checkout-wrap,.contact .cols{grid-template-columns:1fr}}
+
+    /* ========== FOOTER ========== */
+    footer{background:#0b0f1a;border-top:1px solid rgba(255,255,255,.08);padding:34px 18px}
+    .foot-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:20px}
+    .foot h4{margin:0 0 10px}
+    .socials{display:flex;gap:12px;flex-wrap:wrap}
+    .icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15)}
+    .copy{text-align:center;opacity:.8;margin-top:20px;font-size:14px}
+    .link-light{color:#fff;text-decoration:none;opacity:.9}
+    .link-light:hover{opacity:1;color:#f59e0b}
+  </style>
+</head>
+<body>
+
+  <!-- ================= NAV ================= -->
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-logo"><span>AK</span></div>
+        <div>AK TRADER</div>
+      </div>
+      <div>
+        <a href="#about">Tentang</a>
+        <a href="#produk">Produk</a>
+        <a href="#galeri">Galeri</a>
+        <a href="#checkout">Pembayaran</a>
+        <a href="#faq">FAQ</a>
+        <button class="nav-cta" onclick="toggleCart()">🛒 Keranjang <span id="cartCount">0</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HERO SLIDER ================= -->
+  <section class="hero" aria-label="Hero Slider">
+    <div class="slide active" style="background-image:url('DA1.JPG');"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="badge">Jakarta Timur • Indonesia</span>
+      <h1>Fashion Pria & Wanita — Usia 6–45 Tahun</h1>
+      <p>Kualitas premium, harga bersahabat. Belanja mudah, aman, dan cepat di AK TRADER.</p>
+      <button class="btn" onclick="document.getElementById('produk').scrollIntoView({behavior:'smooth'})">Belanja Sekarang</button>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT + VISI MISI (AWAL) ================= -->
+  <section id="about">
+    <div class="wrap about">
+      <div class="about-img">
+        <!-- JPG brand photo -->
+        <img src="DA1.JPG" alt="Showroom AK TRADER (ilustrasi)">
+      </div>
+      <div class="card">
+        <h2>Tentang AK TRADER</h2>
+        <p><strong>Alamat:</strong> Jakarta Timur, Indonesia &nbsp;•&nbsp; <strong>Email:</strong> info@aktrader.co.id</p>
+        <p>AK TRADER adalah toko online fashion untuk semua usia (6–45 tahun). Kami memadukan pilihan model terbaru, bahan berkualitas, dan layanan ramah agar pengalaman belanja Anda selalu menyenangkan.</p>
+        <h3>Visi</h3>
+        <p>Menjadi brand fashion online terpercaya di Indonesia yang menghadirkan produk trendi, nyaman, dan terjangkau.</p>
+        <h3>Misi</h3>
+        <ul>
+          <li>Menyediakan koleksi lengkap untuk pria, wanita, dan remaja.</li>
+          <li>Memberikan layanan cepat, responsif, dan aman.</li>
+          <li>Berkolaborasi dengan produsen lokal untuk kualitas terbaik.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRODUK ================= -->
+  <section id="produk">
+    <div class="wrap">
+      <h2 style="margin:0 0 10px">Katalog Produk</h2>
+      <p class="muted" style="margin-top:0">Filter kategori & usia untuk menemukan produk yang pas.</p>
+
+      <!-- FILTERS -->
+      <div class="filters">
+        <div class="pill active" data-filter="all" onclick="setGenderFilter('all',this)">Semua</div>
+        <div class="pill" data-filter="pria" onclick="setGenderFilter('pria',this)">Pria</div>
+        <div class="pill" data-filter="wanita" onclick="setGenderFilter('wanita',this)">Wanita</div>
+        <div class="pill" data-filter="unisex" onclick="setGenderFilter('unisex',this)">Unisex</div>
+        <select id="ageFilter" onchange="renderProducts()">
+          <option value="all">Usia: Semua</option>
+          <option value="6-12">6–12</option>
+          <option value="13-18">13–18</option>
+          <option value="19-30">19–30</option>
+          <option value="31-45">31–45</option>
+        </select>
+        <input id="searchBox" placeholder="Cari produk..." oninput="renderProducts()" />
+      </div>
+
+      <!-- GRID -->
+      <div id="productGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= GALERI ================= -->
+  <section id="galeri">
+    <div class="wrap">
+      <h2 style="margin-top:0">Galeri</h2>
+      <p class="muted">Klik gambar untuk melihat ukuran besar.</p>
+      <div class="gallery" id="gallery">
+        <!-- JPGs dari Unsplash -->
+        <img src="p1.png" alt="Look 1" onclick="openLightbox(this.src)">
+        <img src="o1.png" alt="Look 2" onclick="openLightbox(this.src)">
+        <img src="n1.png" alt="Look 3" onclick="openLightbox(this.src)">
+        <img src="m1.png" alt="Look 4" onclick="openLightbox(this.src)">
+        <img src="g1.png" alt="Celana Pria" onclick="openLightbox(this.src)">
+        <img src="sr1.png" alt="Kemeja Pria" onclick="openLightbox(this.src)">
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="K1.JPEG" alt="preview">
+  </div>
+
+  <!-- ================= CHECKOUT ================= -->
+  <section id="checkout">
+    <div class="wrap">
+      <h2 style="margin-top:0">Pembayaran & Pengiriman</h2>
+      <div class="checkout-wrap">
+        <div class="form">
+          <label>Nama Penerima</label>
+          <input id="name" placeholder="Nama lengkap" />
+          <label>No. HP</label>
+          <input id="phone" placeholder="08xxxxxxxxxx" />
+          <label>Alamat Lengkap</label>
+          <textarea id="addr" rows="3" placeholder="Jalan, RT/RW, Kel/Desa, Kecamatan, Kota"></textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label>Kota/Kabupaten</label>
+              <input id="city" placeholder="Contoh: Jakarta Timur" />
+            </div>
+            <div>
+              <label>Metode Pembayaran</label>
+              <select id="payMethod">
+                <option>Transfer Bank (BCA/BRI/BNI)</option>
+                <option>E-Wallet (OVO/DANA/GoPay)</option>
+                <option>COD (Cash On Delivery)</option>
+              </select>
+            </div>
+          </div>
+          <label>Catatan</label>
+          <input id="note" placeholder="Opsional, contoh: warna/ukuran" />
+          <button class="btn" onclick="simulateOrder()">Buat Pesanan</button>
+        </div>
+        <div class="sum">
+          <h3 style="margin-top:0">Ringkasan</h3>
+          <div class="row"><span>Subtotal</span><strong id="sumSub">Rp0</strong></div>
+          <div class="row"><span>Berat (estimasi)</span><span id="sumWeight">0.0 kg</span></div>
+          <div class="row"><span>Ongkir</span><strong id="sumShip">Rp0</strong></div>
+          <div class="row"><span>Biaya Admin</span><span id="sumFee">Rp2.000</span></div>
+          <hr style="border-color:rgba(255,255,255,.2)">
+          <div class="row" style="font-size:20px"><strong>Total</strong><strong id="sumTotal">Rp2.000</strong></div>
+          <p class="muted">*Ongkir dihitung otomatis: Jabodetabek lebih murah.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TESTIMONI ================= -->
+  <section>
+    <div class="wrap section-card">
+      <h2 style="margin-top:0">Apa Kata Mereka</h2>
+      <div class="testi">
+        <div class="quote"><div class="stars">★★★★★</div>“Kualitas kainnya enak, jahitan rapi. Repeat order!” — <b>Rina</b></div>
+        <div class="quote"><div class="stars">★★★★★</div>“Proses cepat, admin responsif. Ukuran pas,gak nyesel beli di AK TRADER” — <b>Budi</b></div>
+        <div class="quote"><div class="stars">★★★★☆</div>“Model kekinian, nyaman dipakai seharian, terima kasih AK TRADER” — <b>Andi</b></div>
+        <div class="quote"><div class="stars">★★★★★</div>“Harga bersahabat untuk kualitas premium.AK TRADER memang joss” — <b>Sari</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section id="faq">
+    <div class="wrap section-card faq">
+      <h2 style="margin-top:0">FAQ</h2>
+      <details><summary>Apakah bisa COD?</summary><p>Ya, COD tersedia di area tertentu (konfirmasi saat checkout).</p></details>
+      <details><summary>Berapa lama pengiriman?</summary><p>Jabodetabek 1–3 hari kerja, luar kota 3–7 hari kerja.</p></details>
+      <details><summary>Apakah ada size lengkap?</summary><p>Umumnya S–XXL (lihat detail tiap produk).</p></details>
+      <details><summary>Cara retur/penukaran?</summary><p>Hubungi kami maksimal 3×24 jam setelah barang diterima.</p></details>
+    </div>
+  </section>
+
+  <!-- ================= NEWSLETTER & CONTACT ================= -->
+  <section>
+    <div class="wrap">
+      <div class="section-card contact">
+        <h2 style="margin-top:0">Hubungi Kami</h2>
+        <div class="cols">
+          <div>
+            <p><b>Alamat:</b> Jakarta Timur, Indonesia</p>
+            <p><b>Email:</b> info@aktrader.co.id</p>
+            <p><b>Jam Operasional:</b> Senin–Kamis 08.00–16.00 WIB Jumat-Minggu: Libur
+            </p>
+          </div>
+          <div class="newsletter">
+            <h3>Berlangganan Promo</h3>
+            <form onsubmit="event.preventDefault();alert('Berhasil berlangganan!');">
+              <input type="email" placeholder="Email kamu" required />
+              <button class="btn">Langganan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="foot-inner">
+      <div class="foot">
+        <h4>AK TRADER</h4>
+        <p class="muted">Fashion pria & wanita usia 6–45 tahun. Kualitas premium, harga bersahabat.</p>
+      </div>
+      <div class="foot">
+        <h4>Tautan</h4>
+        <p><a class="link-light" href="#produk">Katalog</a></p>
+        <p><a class="link-light" href="#checkout">Pembayaran</a></p>
+        <p><a class="link-light" href="#faq">FAQ</a></p>
+      </div>
+      <div class="foot">
+        <h4>Ikuti Kami</h4>
+        <div class="socials">
+          <!-- TikTok -->
+          <a class="icon" href="#" aria-label="TikTok" title="TikTok">
+            <svg viewBox="0 0 48 48" width="20" height="20" fill="currentColor"><path d="M34 18.5c3 2.2 6 3.2 9 3.3v6.8c-3.6 0-7.1-1.1-9-2.3v9.5c0 7.6-6.7 12.9-14.3 12.2C12.4 47.3 8 41.8 8.6 35.4c.7-7.4 8.1-12 15.1-9.9v6.9c-2.4-1-5.2.1-6.1 2.6-.9 2.6.5 5.4 3.1 6.3 3.2 1.2 6.3-1.1 6.3-4.3V6h6v5.2c1.1 2.7 3.2 5.4 5.9 7.3Z"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a class="icon" href="#" aria-label="Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 3.5A5.5 5.5 0 1 1 6.5 13 5.51 5.51 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.3a1.2 1.2 0 1 0 1.2 1.2A1.2 1.2 0 0 0 18 6.3z"/></svg>
+          </a>
+          <!-- Telegram -->
+          <a class="icon" href="#" aria-label="Telegram" title="Telegram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M9.04 15.19 8.8 19.6a1 1 0 0 0 1.58.88l3.06-2.18 4.77 3.48a1 1 0 0 0 1.58-.7l2.18-14.2a1 1 0 0 0-1.37-1.1L2.71 11.1a1 1 0 0 0 .07 1.88l5.6 1.88 11.16-8.73-10.5 9.06Z"/></svg>
+          </a>
+          <!-- YouTube -->
+          <a class="icon" href="#" aria-label="YouTube" title="YouTube">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.4.6A3 3 0 0 0 .5 6.2 31.7 31.7 0 0 0 0 12a31.7 31.7 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c2.1.6 9.4.6 9.4.6s7.3 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.7 31.7 0 0 0 24 12a31.7 31.7 0 0 0-.5-5.8ZM9.8 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="copy">© 2023 AK TRADER. All Rights Reserved.</div>
+  </footer>
+
+  <!-- ================= CART DRAWER ================= -->
+  <aside id="cart" class="cart" aria-label="Keranjang">
+    <div class="cart-head">
+      <strong>Keranjang</strong>
+      <button class="closeX" onclick="toggleCart()">✕</button>
+    </div>
+    <div id="cartBody" class="cart-body"></div>
+    <div class="cart-foot">
+      <div class="row"><span>Subtotal</span><strong id="cartSubtotal">Rp0</strong></div>
+      <div class="row"><span>Perkiraan Ongkir</span><span id="cartShip">Rp0</span></div>
+      <div class="row" style="font-size:18px"><strong>Total</strong><strong id="cartTotal">Rp0</strong></div>
+      <button class="checkout" onclick="document.getElementById('checkout').scrollIntoView({behavior:'smooth'});toggleCart()">Lanjut Checkout</button>
+    </div>
+  </aside>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    /* -------- Hero Slider -------- */
+    const slides=[...document.querySelectorAll('.slide')];
+    let sIndex=0; setInterval(()=>{slides[sIndex].classList.remove('active'); sIndex=(sIndex+1)%slides.length; slides[sIndex].classList.add('active');}, 4500);
+
+    /* -------- Data Produk (contoh) -------- */
+    const products = [
+      {id:'p1', name:'Kaos Basic Pria', price:99000, gender:'pria', age:'13-30', img:'st1.png'},
+      {id:'p2', name:'Kemeja Oxford', price:179000, gender:'pria', age:'19-45', img:'sr1.png'},
+      {id:'p3', name:'Jaket Denim Unisex', price:259000, gender:'unisex', age:'13-30', img:'a1.png'},
+      {id:'p4', name:'Blouse Ruffle', price:149000, gender:'wanita', age:'19-45', img:'b1.png'},
+      {id:'p5', name:'Dress Casual', price:229000, gender:'wanita', age:'19-45', img:'c1.png'},
+      {id:'p6', name:'Hoodie Unisex', price:199000, gender:'unisex', age:'13-30', img:'d1.png'},
+      {id:'p7', name:'Kaos Anak Grafis', price:79000, gender:'unisex', age:'6-12', img:'e1.png'},
+      {id:'p8', name:'Cardigan Rajut', price:189000, gender:'wanita', age:'19-45', img:'f1.png'},
+      {id:'p9',  name:'Celana Chino', price:169000, gender:'pria', age:'19-45', img:'g1.png'},
+      {id:'p10', name:'Setelan Remaja', price:159000, gender:'unisex', age:'13-18', img:'h1.png'},
+      {id:'p11', name:'Kaos Polo', price:139000, gender:'pria', age:'19-45', img:'i1.png'},
+      {id:'p12', name:'Tunik Simple', price:169000, gender:'wanita', age:'19-45', img:'j1.png'}
+    ];
+
+    /* -------- Rendering Produk + Filter -------- */
+    let gFilter='all';
+    function setGenderFilter(val, el){
+      gFilter=val; document.querySelectorAll('.filters .pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); renderProducts();
+    }
+    function formatIDR(n){return n.toLocaleString('id-ID')}
+    function renderProducts(){
+      const grid=document.getElementById('productGrid');
+      const age=document.getElementById('ageFilter').value;
+      const q=(document.getElementById('searchBox').value||'').toLowerCase();
+      grid.innerHTML='';
+      products.filter(p=>{
+        const genderOk=(gFilter==='all'||p.gender===gFilter);
+        const ageOk=(age==='all'||p.age===age);
+        const searchOk=p.name.toLowerCase().includes(q);
+        return genderOk && ageOk && searchOk;
+      }).forEach(p=>{
+        const card=document.createElement('div'); card.className='prod';
+        card.innerHTML=`
+          <img src="${p.img}" alt="${p.name}">
+          <div class="body">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+              <strong>${p.name}</strong>
+              <span class="badge">${p.gender.toUpperCase()}</span>
+            </div>
+            <div class="muted">Usia ${p.age}</div>
+            <div class="price">Rp ${formatIDR(p.price)}</div>
+            <div class="qty">
+              <button onclick="changeQty('${p.id}',-1)">−</button>
+              <span id="q_${p.id}">1</span>
+              <button onclick="changeQty('${p.id}',1)">+</button>
+            </div>
+            <button class="btn block" onclick="addToCart('${p.id}')">Tambah ke Keranjang</button>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+    renderProducts();
+
+    function changeQty(id,delta){
+      const el=document.getElementById('q_'+id); let v=parseInt(el.textContent||'1'); v=Math.max(1, v+delta); el.textContent=v;
+    }
+
+    /* -------- Cart Logic -------- */
+    const cart=[]; // {id,name,price,img,qty}
+    function addToCart(id){
+      const qty=parseInt(document.getElementById('q_'+id).textContent||'1');
+      const p=products.find(x=>x.id===id);
+      const found=cart.find(x=>x.id===id);
+      if(found){found.qty+=qty;} else {cart.push({id:p.id,name:p.name,price:p.price,img:p.img,qty});}
+      updateCartUI(); toggleCart(true);
+    }
+    function removeFromCart(id){
+      const idx=cart.findIndex(c=>c.id===id); if(idx>-1){cart.splice(idx,1); updateCartUI();}
+    }
+    function toggleCart(open){const el=document.getElementById('cart'); el.classList[open?'add':'toggle']('open')}
+    function updateCartUI(){
+      const body=document.getElementById('cartBody'); body.innerHTML='';
+      let sub=0, weight=0;
+      cart.forEach(c=>{
+        sub+=c.price*c.qty; weight+=0.3*c.qty; // 0.3kg per item (estimasi)
+        const row=document.createElement('div'); row.className='cart-item';
+        row.innerHTML=`
+          <img src="${c.img}" alt="${c.name}">
+          <div>
+            <div style="font-weight:800">${c.name}</div>
+            <div class="muted">Qty ${c.qty} • Rp ${formatIDR(c.price)}</div>
+            <div class="muted">Subtotal: Rp ${formatIDR(c.price*c.qty)}</div>
+          </div>
+          <button class="closeX" onclick="removeFromCart('${c.id}')">✕</button>
+        `;
+        body.appendChild(row);
+      });
+      const ship=estimateShipping(weight);
+      document.getElementById('cartSubtotal').textContent='Rp '+formatIDR(sub);
+      document.getElementById('cartShip').textContent='Rp '+formatIDR(ship);
+      document.getElementById('cartTotal').textContent='Rp '+formatIDR(sub+ship);
+      document.getElementById('cartCount').textContent=cart.reduce((a,b)=>a+b.qty,0);
+      // update checkout summary
+      document.getElementById('sumSub').textContent='Rp '+formatIDR(sub);
+      document.getElementById('sumWeight').textContent=(weight||0).toFixed(1)+' kg';
+      const fee=2000; document.getElementById('sumShip').textContent='Rp '+formatIDR(ship);
+      document.getElementById('sumTotal').textContent='Rp '+formatIDR(sub+ship+fee);
+    }
+    function estimateShipping(weightKg){
+      // Tarif sederhana: Jabodetabek 10k/kg, luar kota 18k/kg. Minimal 10k.
+      const city=(document.getElementById('city')?.value||'').toLowerCase();
+      const inJabodetabek = /(jakarta|depok|bogor|tangerang|bekasi)/.test(city);
+      const perKg=inJabodetabek?10000:18000; const cost=Math.max(10000, Math.ceil(weightKg)*perKg);
+      return isFinite(cost)?cost:0;
+    }
+
+    /* -------- Checkout Simulation -------- */
+    function simulateOrder(){
+      const nm=document.getElementById('name').value.trim();
+      if(!nm||cart.length===0){alert('Lengkapi data dan pastikan keranjang terisi.');return;}
+      alert('Pesanan atas nama '+nm+' berhasil dibuat (simulasi). Tim AK TRADER akan menghubungi via email/WA. Terima kasih!');
+      cart.splice(0); updateCartUI();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    /* -------- Lightbox -------- */
+    function openLightbox(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('open')}
+    function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
+  </script>
+</body>
+</html>
